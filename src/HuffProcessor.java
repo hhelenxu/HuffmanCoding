@@ -1,4 +1,4 @@
-/** Ameya Rao and
+/** Ameya Rao and Helen Xu
 /**
  * Although this class has a history of several years,
  * it is starting from a blank-slate, new and clean implementation

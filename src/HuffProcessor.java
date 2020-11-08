@@ -70,7 +70,6 @@ public class HuffProcessor {
 		HuffNode current = root;
 		while (true){
 			int bits = in.readBits(1);
-			//System.out.print(bits);
 			if (bits == -1) throw new HuffException("bad input, no PSEUDO_EOF");
 			else {
 				if (bits == 0)
@@ -78,11 +77,10 @@ public class HuffProcessor {
 				else
 					current = current.myRight;
 				if (current.myLeft==null && current.myRight==null) {
-					System.out.println(current.myValue);
 					if (current.myValue == PSEUDO_EOF)
 						break;
 					else {
-						current.myValue = in.readBits(BITS_PER_WORD);
+						out.writeBits(BITS_PER_WORD, current.myValue);
 						current = root;
 					}
 				}

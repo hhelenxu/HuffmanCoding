@@ -43,7 +43,7 @@ public class HuffProcessor {
 	 * @param out
 	 *            Buffered bit stream writing to the output file.
 	 */
-	public int[] readForCounts(BitInputStream in){
+	private int[] readForCounts(BitInputStream in){
 		int[] freq = new int[ALPH_SIZE+1];
 		int bit = in.readBits(BITS_PER_WORD);
 		while (bit != -1){

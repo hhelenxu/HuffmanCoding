@@ -1,3 +1,5 @@
+import java.util.PriorityQueue;
+
 /** Ameya Rao and Helen Xu
 /**
  * Although this class has a history of several years,
@@ -49,6 +51,27 @@ public class HuffProcessor {
 		}
 		freq[PSEUDO_EOF] = 1;
 		return freq;
+	}
+	public HuffNode makeTreeFromCounts(int[] counts){
+		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
+
+		for (int i=0; i<counts.length && counts[i] >0; i++){
+			pq.add(new HuffNode(i, counts[i], null, null));
+		}
+
+		while (pq.size() > 1){
+			HuffNode left = pq.remove();
+			HuffNode right = pq.remove();
+			HuffNode t = new HuffNode(0, left.myWeight+right.myWeight, left, right);
+			pq.add(t);
+		}
+
+		HuffNode root = pq.remove();
+		return root;
+	}
+
+	public String[] makeCodingsFromTree(HuffNode root){
+
 	}
 	public void compress(BitInputStream in, BitOutputStream out){
 

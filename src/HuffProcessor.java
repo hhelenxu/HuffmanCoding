@@ -1,4 +1,5 @@
 import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 /** Ameya Rao and Helen Xu
 /**
@@ -71,13 +72,29 @@ public class HuffProcessor {
 	}
 
 	public String[] makeCodingsFromTree(HuffNode root){
-
+		String[] encodings = new String[ALPH_SIZE+1];
+		codingHelper(root,"",encodings);
+		return encodings;
 	}
+
+	private void codingHelper(HuffNode root, String path, String[] arr) {
+		if (root == null)
+			return;
+		else if (root.myLeft == null && root.myRight == null) {
+			arr[root.myValue] = path;
+			return;
+		}
+		else {
+			codingHelper(root.myLeft, path+"0",arr);
+			codingHelper(root.myRight,path+"1",arr);
+		}
+	}
+
 	public void compress(BitInputStream in, BitOutputStream out){
 
-		int [] counts = readForCounts(in);
+		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
-		String [] codings = makeCodingsFromTree(root);
+		String[] codings = makeCodingsFromTree(root);
 
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);

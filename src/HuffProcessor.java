@@ -70,7 +70,6 @@ public class HuffProcessor {
 		HuffNode root = pq.remove();
 		return root;
 	}
-
 	public String[] makeCodingsFromTree(HuffNode root){
 		String[] encodings = new String[ALPH_SIZE+1];
 		codingHelper(root,"",encodings);
@@ -88,6 +87,31 @@ public class HuffProcessor {
 			codingHelper(root.myLeft, path+"0",arr);
 			codingHelper(root.myRight,path+"1",arr);
 		}
+	}
+
+	public void writeHeader(HuffNode root, BitOutputStream out){
+		if (root == null) return;
+		if(root.myLeft == null && root.myRight == null){
+			out.writeBits(1, 1);
+			out.writeBits(BITS_PER_WORD+1, root.myValue);
+		}
+		else {
+			out.writeBits(1, 0);
+			writeHeader(root.myLeft, out);
+			writeHeader(root.myRight, out);
+		}
+	}
+
+	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out){
+		in.reset();
+		int bit = in.readBits(BITS_PER_WORD);
+		while (bit != -1){
+			String code = codings[bit];
+			out.writeBits(code.length(), Integer.parseInt(code, 2));
+			bit = in.readBits(BITS_PER_WORD);
+		}
+		String code = codings[PSEUDO_EOF];
+		out.writeBits(code.length(), Integer.parseInt(code,2));
 	}
 
 	public void compress(BitInputStream in, BitOutputStream out){
